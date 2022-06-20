@@ -26,9 +26,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install composer
-        uses: php-actions/composer@latest
-        with:
-        command: RUN curl -s https://getcomposer.org/installer | php
+        run: curl -s https://getcomposer.org/installer | php
 
       - name: Move composer bin
         run: mv composer.phar /usr/local/bin/composer
