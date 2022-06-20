@@ -27,15 +27,13 @@ jobs:
 
       - name: Validate composer
         run: |
-          composer update
+          composer validate
       
       - name: Install dependencies
         run: |
           composer install --optimize-autoloader --prefer-dist --no-progress --no-suggest
-          composer install --ignore-platform-reqs
-          composer update --ignore-platform-reqs
           composer update
-          
+
       - name: Directory Permissions
         run: |
           chmod -R 777 ./
