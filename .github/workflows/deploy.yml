@@ -58,10 +58,10 @@ jobs:
         run: |
           docker build -t laravel-app .
           docker build . -f Dockerfile_Nginx -t laravel-nginx
-          docker tag larvel-nginx:latest $ECR_REGISTRY/larvel-nginx:$IMAGE_TAG
-          docker tag larvel-app:latest $ECR_REGISTRY/larvel-app:$IMAGE_TAG
-          docker push $ECR_REGISTRY/larvel-nginx:$IMAGE_TAG
-          docker push $ECR_REGISTRY/larvel-app:$IMAGE_TAG
+          docker tag laravel-nginx:latest $ECR_REGISTRY/laravel-nginx:$IMAGE_TAG
+          docker tag laravel-app:latest $ECR_REGISTRY/laravel-app:$IMAGE_TAG
+          docker push $ECR_REGISTRY/laravel-nginx:$IMAGE_TAG
+          docker push $ECR_REGISTRY/laravel-app:$IMAGE_TAG
 
       # Runs a single command using the runners shell
       - name: Print the image name
