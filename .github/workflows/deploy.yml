@@ -56,14 +56,12 @@ jobs:
           ECR_REPOSITORY: laravelrepo
           IMAGE_TAG: latest
         run: |
-          docker-compose build
+          docker build -t laravel-app .
+          docker build . -f Dockerfile_Nginx -t laravel-nginx
           docker tag larvel-nginx:latest $ECR_REGISTRY/larvel-nginx:$IMAGE_TAG
           docker tag larvel-app:latest $ECR_REGISTRY/larvel-app:$IMAGE_TAG
           docker push $ECR_REGISTRY/larvel-nginx:$IMAGE_TAG
           docker push $ECR_REGISTRY/larvel-app:$IMAGE_TAG
-          echo "setting output values"
-          echo "::set-output name=appimage::$ECR_REGISTRY/larvel-app:$IMAGE_TAG"
-          echo "::set-output name=webimage::$ECR_REGISTRY/larvel-nginx:$IMAGE_TAG"
 
       # Runs a single command using the runners shell
       - name: Print the image name
@@ -74,15 +72,14 @@ jobs:
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition ${{ secrets.ECS_CONTAINER_DEFINITION }} \
-          --query taskDefinition > task-definition.json    
+          aws ecs describe-task-definition --task-definition laravel-TD --query taskDefinition > task-definition.json    
 
       - name: Fill in the new app image ID in the Amazon ECS task definition
         id: app-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: ${{ secrets.ECS_APP_CONTAINER_NAME }}
+          container-name: app
           image: ${{ steps.build-image.outputs.appimage }}
 
       - name: Fill in the new nginx image ID in the Amazon ECS task definition
@@ -90,7 +87,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ steps.app-task-def.outputs.task-definition }}
-          container-name: ${{ secrets.ECS_NGINX_CONTAINER_NAME }}
+          container-name: nginx
           image: ${{ steps.build-image.outputs.webimage }} 
 
       - name: Deploy Amazon ECS task definition
