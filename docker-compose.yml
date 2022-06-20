@@ -25,3 +25,16 @@ services:
       - ./config/nginx/conf.d/:/etc/nginx/conf.d
     depends_on:
       - app  
+  
+  db:
+    image: mysql:8.0.28
+    container_name: db
+    environment:
+      MYSQL_DATABASE: laravelDB
+      MYSQL_ROOT_PASSWORD: "12345678"
+    volumes:
+      - dbdata:/var/lib/mysql/
+
+volumes:
+  dbdata:   
+    driver: local 
