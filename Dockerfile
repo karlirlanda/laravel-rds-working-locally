@@ -20,10 +20,12 @@ RUN docker-php-ext-install pdo_mysql zip exif pcntl
 RUN docker-php-ext-configure gd  --with-freetype=/usr/include/ --with-jpeg=/usr/include/ 
 RUN docker-php-ext-install gd
 
-#get composer:
-RUN curl -s https://getcomposer.org/installer | php
-# move composer into a bin directory you control:
-RUN mv composer.phar /usr/local/bin/composer
+RUN composer udpate
+
+RUN composer install --optimize-autoloader --prefer-dist --no-progress --no-suggest \
+    composer install --ignore-platform-reqs \
+    composer update --ignore-platform-reqs \
+    composer update
 
 
 RUN apk add autoconf && pecl install -o -f redis \
