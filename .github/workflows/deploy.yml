@@ -25,18 +25,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Install composer
+        uses: php-actions/composer@latest
+        with:
+        command: RUN curl -s https://getcomposer.org/installer | php
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: Move composer bin
+        run: mv composer.phar /usr/local/bin/composer
           
       - name: Directory Permissions
-        run: chmod -R 777 ./    
+        run: |
+          chmod -R 777 ./    
           
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
