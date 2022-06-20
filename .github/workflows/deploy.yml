@@ -54,7 +54,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: laravelrepo
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t laravel-app .
           docker build . -f Dockerfile_Nginx -t laravel-nginx
@@ -76,7 +76,7 @@ jobs:
           aws-region: ap-southeast-1
           task-definition: task-definition.json
           container-name: app
-          image: ${{ steps.build-image.outputs.appimage }}
+          image: ${{ steps.login-ecr.outputs.registry }}/laravel-app:${{ github.sha }}
 
       - name: Fill in the new nginx image ID in the Amazon ECS task definition
         id: web-task-def
@@ -87,7 +87,7 @@ jobs:
           aws-region: ap-southeast-1
           task-definition: laravel-TD
           container-name: nginx
-          image: ${{ steps.build-image.outputs.webimage }} 
+          image: ${{ steps.login-ecr.outputs.registry }}/laravel-nginx:${{ github.sha }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
