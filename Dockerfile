@@ -52,14 +52,3 @@ USER www
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
-
-
-# COPY --chown=www:www-data . /var/www
-
-# RUN chown -R www:www /var/www/storage
-# RUN chmod -R 777 /var/www/storage
-
-# USER www
-
-# EXPOSE 9000
-# CMD ["php-fpm"]
