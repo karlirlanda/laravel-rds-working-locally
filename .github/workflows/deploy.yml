@@ -26,13 +26,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: "Install dependencies from composer.lock using composer binary provided by system"
-        run: composer install ${{ env.COMPOSER_FLAGS }}
-
-      - name: "Run install again using composer binary from source"
-        run: bin/composer install ${{ env.COMPOSER_FLAGS }}
+        run: composer install
 
       - name: "Validate composer.json"
-        run: bin/composer validate
+        run: composer validate
 
       - name: Build phar file
         run: php -d phar.readonly=0 bin/compile
