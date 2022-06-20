@@ -49,19 +49,27 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build laravel
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: laravelrepo
+          ECR_REPOSITORY: laravel-app
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t laravel-app .
+          docker tag laravel-app:latest $ECR_REGISTRY/laravel-app:$IMAGE_TAG
+          docker push $ECR_REGISTRY/laravel-app:$IMAGE_TAG
+
+      - name: Build nginx
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: laravel-nginx
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
           docker build . -f Dockerfile_Nginx -t laravel-nginx
           docker tag laravel-nginx:latest $ECR_REGISTRY/laravel-nginx:$IMAGE_TAG
-          docker tag laravel-app:latest $ECR_REGISTRY/laravel-app:$IMAGE_TAG
           docker push $ECR_REGISTRY/laravel-nginx:$IMAGE_TAG
-          docker push $ECR_REGISTRY/laravel-app:$IMAGE_TAG
 
       - name: Download task definition
         run: |
