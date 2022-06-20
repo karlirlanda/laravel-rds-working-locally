@@ -25,6 +25,27 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Install ubuntu dependencies
+        run: |
+          apt-get udpate && apt-get -y upgrade
+          apt-get install php-fpm
+          apt-get install php-mysql
+          apt-get install mcrypt
+          apt-get install php-gd
+          apt-get install php-xml
+          apt-get install php-gmp
+          apt-get install curl
+          apt-get install php-curl
+          apt-get install zip
+          apt-get install php-zip
+          apt-get install php-redis
+          apt-get install php-mbstring
+          apt-get install php-opache
+          apt-get install php-bcmath
+          apt-get install openssl
+          apt-get install nginx
+          apt-get install vim
+
       - name: Validate composer
         run: |
           composer validate
