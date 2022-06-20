@@ -36,8 +36,6 @@ jobs:
       - name: Directory Permissions
         run: |
           chmod -R 777 ./
-          chmod -R 777 /var/www/storage
-          chmod -R 777 /var/www/vendor
           
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
