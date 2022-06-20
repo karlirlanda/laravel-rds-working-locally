@@ -63,13 +63,6 @@ jobs:
           docker push $ECR_REGISTRY/laravel-nginx:$IMAGE_TAG
           docker push $ECR_REGISTRY/laravel-app:$IMAGE_TAG
 
-      # Runs a single command using the runners shell
-      - name: Print the image name
-        run: |
-          echo the images are
-          echo ${{ steps.build-image.outputs.appimage }}
-          echo ${{ steps.build-image.outputs.webimage }}
-
       - name: Download task definition
         run: |
           aws ecs describe-task-definition --task-definition laravel-TD --query taskDefinition > task-definition.json    
@@ -78,6 +71,9 @@ jobs:
         id: app-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
           task-definition: task-definition.json
           container-name: app
           image: ${{ steps.build-image.outputs.appimage }}
@@ -86,7 +82,10 @@ jobs:
         id: web-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ steps.app-task-def.outputs.task-definition }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+          task-definition: laravel-TD
           container-name: nginx
           image: ${{ steps.build-image.outputs.webimage }} 
 
