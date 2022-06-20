@@ -25,15 +25,20 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install composer
-        run: curl -s https://getcomposer.org/installer | php
+      - name: "Install dependencies from composer.lock using composer binary provided by system"
+        run: composer install ${{ env.COMPOSER_FLAGS }}
 
-      - name: Move composer bin
-        run: mv composer.phar /usr/local/bin/composer
+      - name: "Run install again using composer binary from source"
+        run: bin/composer install ${{ env.COMPOSER_FLAGS }}
+
+      - name: "Validate composer.json"
+        run: bin/composer validate
+
+      - name: Build phar file
+        run: php -d phar.readonly=0 bin/compile
           
       - name: Directory Permissions
-        run: |
-          chmod -R 777 ./    
+        run: chmod -R 777 ./    
           
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
