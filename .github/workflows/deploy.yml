@@ -27,24 +27,25 @@ jobs:
 
       - name: Install ubuntu dependencies
         run: |
-          apt-get udpate && apt-get -y upgrade
-          apt-get install php-fpm
-          apt-get install php-mysql
-          apt-get install mcrypt
-          apt-get install php-gd
-          apt-get install php-xml
-          apt-get install php-gmp
-          apt-get install curl
-          apt-get install php-curl
-          apt-get install zip
-          apt-get install php-zip
-          apt-get install php-redis
-          apt-get install php-mbstring
-          apt-get install php-opache
-          apt-get install php-bcmath
-          apt-get install openssl
-          apt-get install nginx
-          apt-get install vim
+          sudo apt-get udpate
+          sudo apt-get -y upgrade
+          sudo apt-get install php-fpm
+          sudo apt-get install php-mysql
+          sudo apt-get install mcrypt
+          sudo apt-get install php-gd
+          sudo apt-get install php-xml
+          sudo apt-get install php-gmp
+          sudo apt-get install curl
+          sudo apt-get install php-curl
+          sudo apt-get install zip
+          sudo apt-get install php-zip
+          sudo apt-get install php-redis
+          sudo apt-get install php-mbstring
+          sudo apt-get install php-opache
+          sudo apt-get install php-bcmath
+          sudo apt-get install openssl
+          sudo apt-get install nginx
+          sudo apt-get install vim
 
       - name: Validate composer
         run: |
