@@ -31,8 +31,8 @@ jobs:
       - name: "Validate composer.json"
         run: composer validate
 
-      - name: Build phar file
-        run: php -d phar.readonly=0 bin/compile
+      - name: Update Composer
+        run: composer update
           
       - name: Directory Permissions
         run: chmod -R 777 ./    
