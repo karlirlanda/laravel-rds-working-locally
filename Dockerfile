@@ -1,4 +1,9 @@
-FROM php:8.1.7-fpm-alpine3.16
+FROM nginx:alpine
+
+COPY ./config/nginx/conf.d/app.conf /etc/nginx/conf.d/app.conf
+COPY . /var/www
+
+FROM php:8.1-fpm-alpine
 
 WORKDIR  /var/www
 
@@ -27,8 +32,8 @@ RUN apk add autoconf && pecl install -o -f redis \
 
 COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
-RUN addgroup -g 655 -S www && \
-    adduser -u 655 -S www -G www
+RUN addgroup -g 777 -S www && \
+    adduser -u 777 -S www -G www
 
 # Copy existing application directory contents
 COPY . /var/www
@@ -47,14 +52,3 @@ USER www
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
-
-
-# COPY --chown=www:www-data . /var/www
-
-# RUN chown -R www:www /var/www/storage
-# RUN chmod -R 777 /var/www/storage
-
-# USER www
-
-# EXPOSE 9000
-# CMD ["php-fpm"]

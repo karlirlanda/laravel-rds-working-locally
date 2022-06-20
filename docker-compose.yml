@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   app:
     build:
@@ -25,16 +25,3 @@ services:
       - ./config/nginx/conf.d/:/etc/nginx/conf.d
     depends_on:
       - app  
-
-  db:
-    image: mysql:8
-    container_name: db
-    environment:
-      MYSQL_DATABASE: appDB
-      MYSQL_ROOT_PASSWORD: "12345678"
-    volumes:
-      - dbdata:/var/lib/mysql/
-
-volumes:
-  dbdata:   
-    driver: local 
