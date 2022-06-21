@@ -29,7 +29,8 @@ jobs:
         run: |
           cd ~
           curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
-          composer update
+          composer install --optimize-autoloader --prefer-dist --no-progress --no-suggest
+          
 
       - name: Directory Permissions
         run: |
