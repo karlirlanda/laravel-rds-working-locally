@@ -27,9 +27,8 @@ jobs:
 
       - name: Install composer
         run: |
-          cd ~
           curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
-          composer install --optimize-autoloader --prefer-dist --no-progress --no-suggest
+          composer validate
           
 
       - name: Directory Permissions
