@@ -70,7 +70,7 @@ jobs:
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition laravel-TD --query taskDefinition > task-definition.json    
+          aws ecs describe-task-definition --task-definition laravelTD --query taskDefinition > task-definition.json    
 
       - name: Fill in the new app image ID in the Amazon ECS task definition
         id: app-task-def
@@ -78,7 +78,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: app
-          image: 226255317875.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
+          image: 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
         env:
           AWS_DEFAULT_REGION: ap-southeast-1
           AWS_REGION: ap-southeast-1
@@ -91,7 +91,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: nginx
-          image: 226255317875.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest
+          image: 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest
         env:
           AWS_DEFAULT_REGION: ap-southeast-1
           AWS_REGION: ap-southeast-1
