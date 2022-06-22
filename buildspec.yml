@@ -1,0 +1,30 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com
+      - REPOSITORY_URI=963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
+      - REPOSITORY_URI=963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t laravel-app .
+      - docker build -f Dockerfile_Nginx -t laravel-nginx .
+      - docker tag 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:$IMAGE_TAG
+      - docker tag 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
+      - docker push 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"hello-world","imageUri":"%s"}]' 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
