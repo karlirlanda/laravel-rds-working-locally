@@ -9,22 +9,22 @@ phases:
       - REPOSITORY_URI=963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
       - REPOSITORY_URI=963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t laravel-app .
       - docker build -f Dockerfile_Nginx -t laravel-nginx .
-      - docker tag 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:$IMAGE_TAG
-      - docker tag 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:$IMAGE_TAG
+      - docker tag laravel-app:latest 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
+      - docker tag laravel-nginx:latest 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest
-      - docker push 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:$IMAGE_TAG
+      - docker push 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"hello-world","imageUri":"%s"}]' 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"laravel-app","imageUri":"%s"}]' 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app:latest> imagedefinitions.json
+      - printf '[{"name":"laravel-nginx","imageUri":"%s"}]' 963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx:latest > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
