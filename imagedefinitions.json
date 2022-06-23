@@ -1,0 +1,10 @@
+[
+    {
+      "name": "app",
+      "imageUri": "963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-app"
+    },
+    {
+      "name": "nginx",
+      "imageUri": "963939003362.dkr.ecr.ap-southeast-1.amazonaws.com/laravel-nginx"
+    }
+  ]
